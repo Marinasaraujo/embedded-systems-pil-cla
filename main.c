@@ -6,22 +6,15 @@
 #include "board.h"
 #include "scicomm.h"
 
-// #define B0 0.001033
-// #define B1 0.000767
-// #define B2 -0.000266
-// #define A1 -1.521886
-// #define A2 0.521886
-
-// #define REF 20
-// #define UL 1
-// #define LL 0
-
-// float x[3]={0};
-// float y[3]={0};
 
 
-#pragma DATA_SECTION(vo,"CpuToCla1MsgRAM"); // aloca a variavel em espaços especificos da memória, definidos no .cmd
-float vo;
+#pragma DATA_SECTION(vg,"CpuToCla1MsgRAM"); // aloca a variavel em espaços especificos da memória, definidos no .cmd
+#pragma DATA_SECTION(ig,"CpuToCla1MsgRAM"); 
+#pragma DATA_SECTION(ig_ref,"CpuToCla1MsgRAM"); 
+float vg;
+float ig;
+float ig_ref;
+
 #pragma DATA_SECTION(d,"Cla1ToCpuMsgRAM");
 float d;
 
@@ -52,7 +45,9 @@ void main(void)
 //
 __interrupt void INT_SCI0_RX_ISR(void)
 {
-    protocolReceiveData(SCI0_BASE,&vo,sizeof(float)); // recebe dado na SCI
+    protocolReceiveData(SCIA_BASE, &vg,     sizeof(float)); 
+    protocolReceiveData(SCIA_BASE, &ig,     sizeof(float)); 
+    protocolReceiveData(SCIA_BASE, &ig_ref, sizeof(float)); 
     CLA_forceTasks(myCLA0_BASE,CLA_TASKFLAG_1); // dispara cla
 
 

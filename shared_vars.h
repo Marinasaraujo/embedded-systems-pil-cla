@@ -8,7 +8,9 @@
 #ifndef SHARED_VARS_H_
 #define SHARED_VARS_H_
 
-extern float vo;
+extern float vg;
+extern float ig;
+extern float ig_ref;
 extern float d;
 
 #endif /* SHARED_VARS_H_ */

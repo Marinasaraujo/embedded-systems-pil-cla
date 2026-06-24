@@ -2,29 +2,32 @@
 #include "board.h"
 #include "shared_vars.h"
 
-#define B0 0.001033f
-#define B1 0.000767f
-#define B2 -0.000266f
-#define A1 -1.521886f
-#define A2 0.521886f
+#define KP   27.92f       
+#define K1   0.3248f
+#define K2   1.9996f
+#define VDC  400.0f
 
-#define REF 20
-#define UL 1
-#define LL 0
 
-float x[3];
-float y[3];
+float erro_z1, erro_z2;
+float res_z1,  res_z2;
 
-__interrupt void Cla1Task1()
+__interrupt void Cla1Task1(void)
 {
+    float erro = ig_ref - ig;
 
-    x[2] = x[1]; x[1] = x[0]; x[0] = REF - vo;
-    y[2] = y[1]; y[1] = y[0];
-    y[0] = B0*x[0] + B1*x[1] + B2*x[2] - A1*y[1] - A2*y[2];
+    // integrador ressonante
+    float res = K1*erro - K1*erro_z2 + K2*res_z1 - res_z2;
 
-    y[0] = (y[0] > UL) ? UL : y[0];
-    y[0] = (y[0] < LL) ? LL : y[0];
-    
-    d = y[0];
+    // P + R + feedforward da rede
+    float v_control = KP*erro + res + vg;
 
+    // saturação / anti-windup no barramento
+    v_control = (v_control >  VDC) ?  VDC : v_control;
+    v_control = (v_control < -VDC) ? -VDC : v_control;
+
+    d = v_control / VDC;
+
+    // memória
+    erro_z2 = erro_z1;  erro_z1 = erro;
+    res_z2  = res_z1;   res_z1  = res;
 }
