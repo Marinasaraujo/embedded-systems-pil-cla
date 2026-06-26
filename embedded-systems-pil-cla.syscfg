@@ -25,7 +25,6 @@ cla1.enable_CLA_TASK_4 = false;
 cla1.enable_CLA_TASK_5 = false;
 cla1.enable_CLA_TASK_6 = false;
 cla1.enable_CLA_TASK_7 = false;
-cla1.enable_CLA_TASK_8 = false;
 cla1.cpuint_CLA_TASK_2 = false;
 cla1.cpuint_CLA_TASK_3 = false;
 cla1.cpuint_CLA_TASK_4 = false;

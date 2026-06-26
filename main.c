@@ -30,10 +30,12 @@ void main(void)
     Interrupt_initVectorTable();
     Board_init();
 
+    CLA_forceTasks(myCLA0_BASE, CLA_TASKFLAG_8); // Roda só uma vez como init das variaveis
+
     // Habilita interrupcoes globais e de tempo real
     EINT;
     ERTM;
-
+    
     while (1)
     {
 
